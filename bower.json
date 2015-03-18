@@ -5,7 +5,7 @@
     "Anthon Astrom <anthon@astromzimmer.com>"
   ],
   "description": "A gallery.",
-  "main": "aGALLERY.jquery.coffee",
+  "main": "jquery.aGALLERY.coffee",
   "license": "aLICENCE",
   "homepage": "astromzimmer.com",
   "ignore": [
