@@ -1,11 +1,11 @@
 {
   "name": "aGALLERY",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "authors": [
     "Anthon Astrom <anthon@astromzimmer.com>"
   ],
   "description": "A gallery.",
-  "main": "jquery.aGALLERY.coffee",
+  "main": "jquery.aGALLERY.js",
   "license": "aLICENCE",
   "homepage": "astromzimmer.com",
   "ignore": [
