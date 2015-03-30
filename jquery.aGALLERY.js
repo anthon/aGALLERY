@@ -16,9 +16,9 @@
       init: function(options) {
         options = options || {};
         return this.each(function() {
-          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, counter, cover, current, data, fixed_height, fixed_width, h, height, i, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, w, width;
+          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fixed_height, fixed_width, h, height, i, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, w, width;
           $this = $(this);
-          cover = options.cover || false;
+          background_size = options.backgroundSize || false;
           mobile = options.mobile || false;
           swipe_threshold = options.swipeThreshold || 20;
           counter = options.counter || false;
@@ -46,7 +46,7 @@
           $cforward = $("<div style=\"display:inline;margin:0 0 0 4px;cursor:pointer;\">></div>");
           if (l > 1) {
             if (!data) {
-              if (cover && coverSupported()) {
+              if (background_size && coverSupported()) {
                 images.each(function() {
                   var $image, $img, src;
                   $image = $(this);
@@ -54,7 +54,7 @@
                   src = $img.attr('src');
                   $image.css({
                     'background-image': 'url(' + src + ')',
-                    'background-size': 'cover',
+                    'background-size': background_size,
                     'background-position': 'center',
                     'width': '100%',
                     'height': '100%'

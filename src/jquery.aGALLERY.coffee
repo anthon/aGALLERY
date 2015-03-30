@@ -13,7 +13,7 @@
       options = options or {}
       @each ->
         $this = $(this)
-        cover = options.cover or false
+        background_size = options.backgroundSize or false
         mobile = options.mobile or false
         swipe_threshold = options.swipeThreshold or 20
         counter = options.counter or false
@@ -46,14 +46,14 @@
         if l > 1
           # if not already initialised
           unless data
-            if cover && coverSupported()
+            if background_size && coverSupported()
               images.each ->
                 $image = $(this)
                 $img = $('img',$image)
                 src = $img.attr('src')
                 $image.css
                   'background-image': 'url('+src+')'
-                  'background-size': 'cover'
+                  'background-size': background_size
                   'background-position': 'center'
                   'width': '100%'
                   'height': '100%'
