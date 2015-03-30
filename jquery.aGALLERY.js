@@ -238,7 +238,7 @@
         } else {
           index = (loop_ || slideshow ? l - 1 : data.current);
         }
-        $this.goToIndex(index);
+        $this.aGALLERY("goToIndex", index);
       },
       next: function() {
         var $this, data, index, l, left, loop_, slideshow;
@@ -253,7 +253,7 @@
         } else {
           index = (loop_ || slideshow ? 0 : data.current);
         }
-        $this.goToIndex(index);
+        $this.aGALLERY("goToIndex", index);
       },
       updateCounter: function() {
         var $this, data;

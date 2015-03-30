@@ -207,7 +207,7 @@
         index = data.current - 1
       else
         index = (if (loop_ or slideshow) then l - 1 else data.current)
-      $this.goToIndex index
+      $this.aGALLERY "goToIndex", index
       return
 
     next: ->
@@ -221,7 +221,7 @@
         index = data.current + 1
       else
         index = (if (loop_ or slideshow) then 0 else data.current)
-      $this.goToIndex index
+      $this.aGALLERY "goToIndex", index
       return
 
     updateCounter: ->
