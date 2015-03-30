@@ -198,8 +198,35 @@
           }
         });
       },
+      goToIndex: function(index) {
+        var $this, data, left, right;
+        if (!index || isNaN(index)) {
+          return false;
+        }
+        $this = $(this);
+        data = $this.data("gallery");
+        if (index < 0 || data.images.length < index) {
+          return false;
+        }
+        left = data.current;
+        right = data.images.length - data.current - 1;
+        $this.trigger("navigating");
+        data.current = data.images[index];
+        data.images.hide();
+        $(data.current).show();
+        if (left === 1 && (!loop_ && !slideshow)) {
+          data.$back.show();
+        } else {
+          data.$back.hide();
+        }
+        if (right === 1 && (!loop_ && !slideshow)) {
+          data.$forward.show();
+        } else {
+          data.$forward.hide();
+        }
+      },
       prev: function() {
-        var $this, data, l, left, loop_, slideshow;
+        var $this, data, index, l, left, loop_, slideshow;
         $this = $(this);
         data = $this.data("gallery");
         l = data.images.length;
@@ -207,20 +234,14 @@
         loop_ = data.loop;
         slideshow = data.slideshow;
         if (left > 0) {
-          data.current = data.current - 1;
+          index = data.current - 1;
         } else {
-          data.current = (loop_ || slideshow ? l - 1 : data.current);
+          index = (loop_ || slideshow ? l - 1 : data.current);
         }
-        data.images.hide();
-        $(data.images[data.current]).show();
-        $this.trigger("navigating");
-        data.$forward.show();
-        if (left === 1 && (!loop_ && !slideshow)) {
-          data.$back.hide();
-        }
+        $this.goToIndex(index);
       },
       next: function() {
-        var $this, data, l, left, loop_, slideshow;
+        var $this, data, index, l, left, loop_, slideshow;
         $this = $(this);
         data = $this.data("gallery");
         l = data.images.length;
@@ -228,17 +249,11 @@
         loop_ = data.loop;
         slideshow = data.slideshow;
         if (left > 0) {
-          data.current = data.current + 1;
+          index = data.current + 1;
         } else {
-          data.current = (loop_ || slideshow ? 0 : data.current);
+          index = (loop_ || slideshow ? 0 : data.current);
         }
-        data.images.hide();
-        $(data.images[data.current]).show();
-        $this.trigger("navigating");
-        data.$back.show();
-        if (left === 1 && (!loop_ && !slideshow)) {
-          data.$forward.hide();
-        }
+        $this.goToIndex(index);
       },
       updateCounter: function() {
         var $this, data;

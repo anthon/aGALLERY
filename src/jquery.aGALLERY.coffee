@@ -181,6 +181,20 @@
 
         return
 
+    goToIndex: (index)->
+      if not index or isNaN(index) then return false
+      $this = $(this)
+      data = $this.data("gallery")
+      if index < 0 or data.images.length < index then return false
+      left = data.current
+      right = data.images.length - data.current - 1
+      $this.trigger "navigating"
+      data.current = data.images[index]
+      data.images.hide()
+      $(data.current).show()
+      if left is 1 and (not loop_ and not slideshow) then data.$back.show() else data.$back.hide()
+      if right is 1 and (not loop_ and not slideshow) then data.$forward.show() else data.$forward.hide()
+      return
 
     prev: ->
       $this = $(this)
@@ -190,14 +204,10 @@
       loop_ = data.loop
       slideshow = data.slideshow
       if left > 0
-        data.current = data.current - 1
+        index = data.current - 1
       else
-        data.current = (if (loop_ or slideshow) then l - 1 else data.current)
-      data.images.hide()
-      $(data.images[data.current]).show()
-      $this.trigger "navigating"
-      data.$forward.show()
-      data.$back.hide()  if left is 1 and (not loop_ and not slideshow)
+        index = (if (loop_ or slideshow) then l - 1 else data.current)
+      $this.goToIndex index
       return
 
     next: ->
@@ -208,14 +218,10 @@
       loop_ = data.loop
       slideshow = data.slideshow
       if left > 0
-        data.current = data.current + 1
+        index = data.current + 1
       else
-        data.current = (if (loop_ or slideshow) then 0 else data.current)
-      data.images.hide()
-      $(data.images[data.current]).show()
-      $this.trigger "navigating"
-      data.$back.show()
-      data.$forward.hide()  if left is 1 and (not loop_ and not slideshow)
+        index = (if (loop_ or slideshow) then 0 else data.current)
+      $this.goToIndex index
       return
 
     updateCounter: ->
