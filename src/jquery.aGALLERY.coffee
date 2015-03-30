@@ -182,7 +182,6 @@
         return
 
     goToIndex: (index)->
-      console.log 'Index:',index
       if isNaN(index) then return false
       $this = $(this)
       data = $this.data("gallery")
@@ -195,8 +194,6 @@
       right = data.images.length - data.current - 1
       data.images.hide()
       $(data.images[index]).show()
-      console.log 'Left:',left
-      console.log 'Right:',right
       if left is 0 and (not loop_ and not slideshow) then data.$back.hide() else data.$back.show()
       if right is 0 and (not loop_ and not slideshow) then data.$forward.hide() else data.$forward.show()
       return

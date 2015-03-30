@@ -200,7 +200,6 @@
       },
       goToIndex: function(index) {
         var $this, data, left, loop_, right, slideshow;
-        console.log('Index:', index);
         if (isNaN(index)) {
           return false;
         }
@@ -217,8 +216,6 @@
         right = data.images.length - data.current - 1;
         data.images.hide();
         $(data.images[index]).show();
-        console.log('Left:', left);
-        console.log('Right:', right);
         if (left === 0 && (!loop_ && !slideshow)) {
           data.$back.hide();
         } else {
