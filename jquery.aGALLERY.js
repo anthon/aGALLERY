@@ -152,7 +152,7 @@
                 zIndex: "0"
               });
               $container.css({
-                width: '100%'
+                width: $this.width()
               });
               $this.wrap($container).wrap($floater);
               $this.after($controls);
@@ -199,30 +199,35 @@
         });
       },
       goToIndex: function(index) {
-        var $this, data, left, right;
-        if (!index || isNaN(index)) {
+        var $this, data, left, loop_, right, slideshow;
+        console.log('Index:', index);
+        if (isNaN(index)) {
           return false;
         }
         $this = $(this);
         data = $this.data("gallery");
+        loop_ = data.loop;
+        slideshow = data.slideshow;
         if (index < 0 || data.images.length < index) {
           return false;
         }
+        $this.trigger("navigating");
+        data.current = index;
         left = data.current;
         right = data.images.length - data.current - 1;
-        $this.trigger("navigating");
-        data.current = data.images[index];
         data.images.hide();
-        $(data.current).show();
-        if (left === 1 && (!loop_ && !slideshow)) {
-          data.$back.show();
-        } else {
+        $(data.images[index]).show();
+        console.log('Left:', left);
+        console.log('Right:', right);
+        if (left === 0 && (!loop_ && !slideshow)) {
           data.$back.hide();
-        }
-        if (right === 1 && (!loop_ && !slideshow)) {
-          data.$forward.show();
         } else {
+          data.$back.show();
+        }
+        if (right === 0 && (!loop_ && !slideshow)) {
           data.$forward.hide();
+        } else {
+          data.$forward.show();
         }
       },
       prev: function() {

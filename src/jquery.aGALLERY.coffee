@@ -139,7 +139,7 @@
               zIndex: "0"
 
             $container.css
-              width: '100%'
+              width: $this.width()
             $this.wrap($container).wrap $floater
             $this.after $controls
             if counter
@@ -182,18 +182,23 @@
         return
 
     goToIndex: (index)->
-      if not index or isNaN(index) then return false
+      console.log 'Index:',index
+      if isNaN(index) then return false
       $this = $(this)
       data = $this.data("gallery")
+      loop_ = data.loop
+      slideshow = data.slideshow
       if index < 0 or data.images.length < index then return false
+      $this.trigger "navigating"
+      data.current = index
       left = data.current
       right = data.images.length - data.current - 1
-      $this.trigger "navigating"
-      data.current = data.images[index]
       data.images.hide()
-      $(data.current).show()
-      if left is 1 and (not loop_ and not slideshow) then data.$back.show() else data.$back.hide()
-      if right is 1 and (not loop_ and not slideshow) then data.$forward.show() else data.$forward.hide()
+      $(data.images[index]).show()
+      console.log 'Left:',left
+      console.log 'Right:',right
+      if left is 0 and (not loop_ and not slideshow) then data.$back.hide() else data.$back.show()
+      if right is 0 and (not loop_ and not slideshow) then data.$forward.hide() else data.$forward.show()
       return
 
     prev: ->
