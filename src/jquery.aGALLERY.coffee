@@ -55,6 +55,7 @@
                   'background-image': 'url('+src+')'
                   'background-size': background_size
                   'background-position': 'center'
+                  'background-repeat': 'none'
                   'width': '100%'
                   'height': '100%'
                 $img.hide()
