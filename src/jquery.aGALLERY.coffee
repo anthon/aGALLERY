@@ -138,7 +138,7 @@
               zIndex: "0"
 
             $container.css
-              width: $this.width()
+              width: '100%'
             $this.wrap($container).wrap $floater
             $this.after $controls
             if counter
