@@ -147,24 +147,22 @@
               $counter.prepend $cback
               $counter.append $cforward
               $this.after $counter
-              $cback.bind "click", ->
-                $this.aGALLERY "prev"
-                $this.trigger "navigating"
+              $cback.bind 'click', ->
+                $this.aGALLERY 'prev'
                 return
 
-              $cforward.bind "click", ->
-                $this.aGALLERY "next"
-                $this.trigger "navigating"
+              $cforward.bind 'click', ->
+                $this.aGALLERY 'next'
                 return
 
             if slideshow
               slider = setInterval(->
-                $this.aGALLERY "next"
+                $this.aGALLERY 'next'
                 return
               , interval)
-            $this.on "navigating", ->
+            $this.on 'navigating', ->
               clearInterval slider  if slider
-              $this.aGALLERY "updateCounter"  if counter
+              $this.aGALLERY 'updateCounter'  if counter
               return
             
             # set data
@@ -184,12 +182,12 @@
     goToIndex: (index)->
       if isNaN(index) then return false
       $this = $(this)
-      data = $this.data("gallery")
+      data = $this.data('gallery')
       loop_ = data.loop
       slideshow = data.slideshow
       if index < 0 or data.images.length < index then return false
-      $this.trigger "navigating"
       data.current = index
+      $this.trigger 'navigating', data.current
       left = data.current
       right = data.images.length - data.current - 1
       data.images.hide()
@@ -200,7 +198,7 @@
 
     prev: ->
       $this = $(this)
-      data = $this.data("gallery")
+      data = $this.data('gallery')
       l = data.images.length
       left = data.current
       loop_ = data.loop
@@ -209,12 +207,12 @@
         index = data.current - 1
       else
         index = (if (loop_ or slideshow) then l - 1 else data.current)
-      $this.aGALLERY "goToIndex", index
+      $this.aGALLERY 'goToIndex', index
       return
 
     next: ->
       $this = $(this)
-      data = $this.data("gallery")
+      data = $this.data('gallery')
       l = data.images.length
       left = data.images.length - data.current - 1
       loop_ = data.loop
@@ -223,12 +221,12 @@
         index = data.current + 1
       else
         index = (if (loop_ or slideshow) then 0 else data.current)
-      $this.aGALLERY "goToIndex", index
+      $this.aGALLERY 'goToIndex', index
       return
 
     updateCounter: ->
       $this = $(this)
-      data = $this.data("gallery")
+      data = $this.data('gallery')
       data.$ccurrent.text data.current + 1
       return
 
@@ -236,7 +234,7 @@
     # method logic
     if methods[method]
       methods[method].apply this, Array::slice.call(arguments, 1)
-    else if typeof method is "object" or not method
+    else if typeof method is 'object' or not method
       methods.init.apply this, arguments
     else
       $.error "Method " + method + " doesn't exist in aGALLERY"

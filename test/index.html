@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>New Page</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0, minimal-ui">
+    <style>
+      #view {
+      	position: absolute;
+      	top: 0;
+      	left: 0;
+      	right: 0;
+      	bottom: 0;
+      	width: 420px;
+      	height: 240px;
+      	margin: auto;
+      }
+      
+    </style>
+  </head>
+  <body id="body">
+    <div id="view">
+      <div class="aGALLERY">
+        <div class="image"><img src="http://placehold.it/420x240/F0F/FFF"></div>
+        <div class="image"><img src="http://placehold.it/420x240/0FF/FFF"></div>
+        <div class="image"><img src="http://placehold.it/420x240/00F/FFF"></div>
+      </div>
+    </div>
+  </body>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="../jquery.aGALLERY.js"></script>
+  <script>
+    $(document).ready(function(){
+    	$('.aGALLERY').aGALLERY({
+    		loop: false
+    	});
+    });
+  </script>
+</html>

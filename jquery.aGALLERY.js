@@ -161,26 +161,24 @@
                 $counter.prepend($cback);
                 $counter.append($cforward);
                 $this.after($counter);
-                $cback.bind("click", function() {
-                  $this.aGALLERY("prev");
-                  $this.trigger("navigating");
+                $cback.bind('click', function() {
+                  $this.aGALLERY('prev');
                 });
-                $cforward.bind("click", function() {
-                  $this.aGALLERY("next");
-                  $this.trigger("navigating");
+                $cforward.bind('click', function() {
+                  $this.aGALLERY('next');
                 });
               }
               if (slideshow) {
                 slider = setInterval(function() {
-                  $this.aGALLERY("next");
+                  $this.aGALLERY('next');
                 }, interval);
               }
-              $this.on("navigating", function() {
+              $this.on('navigating', function() {
                 if (slider) {
                   clearInterval(slider);
                 }
                 if (counter) {
-                  $this.aGALLERY("updateCounter");
+                  $this.aGALLERY('updateCounter');
                 }
               });
               $this.data("gallery", {
@@ -204,14 +202,14 @@
           return false;
         }
         $this = $(this);
-        data = $this.data("gallery");
+        data = $this.data('gallery');
         loop_ = data.loop;
         slideshow = data.slideshow;
         if (index < 0 || data.images.length < index) {
           return false;
         }
-        $this.trigger("navigating");
         data.current = index;
+        $this.trigger('navigating', data.current);
         left = data.current;
         right = data.images.length - data.current - 1;
         data.images.hide();
@@ -230,7 +228,7 @@
       prev: function() {
         var $this, data, index, l, left, loop_, slideshow;
         $this = $(this);
-        data = $this.data("gallery");
+        data = $this.data('gallery');
         l = data.images.length;
         left = data.current;
         loop_ = data.loop;
@@ -240,12 +238,12 @@
         } else {
           index = (loop_ || slideshow ? l - 1 : data.current);
         }
-        $this.aGALLERY("goToIndex", index);
+        $this.aGALLERY('goToIndex', index);
       },
       next: function() {
         var $this, data, index, l, left, loop_, slideshow;
         $this = $(this);
-        data = $this.data("gallery");
+        data = $this.data('gallery');
         l = data.images.length;
         left = data.images.length - data.current - 1;
         loop_ = data.loop;
@@ -255,19 +253,19 @@
         } else {
           index = (loop_ || slideshow ? 0 : data.current);
         }
-        $this.aGALLERY("goToIndex", index);
+        $this.aGALLERY('goToIndex', index);
       },
       updateCounter: function() {
         var $this, data;
         $this = $(this);
-        data = $this.data("gallery");
+        data = $this.data('gallery');
         data.$ccurrent.text(data.current + 1);
       }
     };
     $.fn.aGALLERY = function(method) {
       if (methods[method]) {
         methods[method].apply(this, Array.prototype.slice.call(arguments, 1));
-      } else if (typeof method === "object" || !method) {
+      } else if (typeof method === 'object' || !method) {
         methods.init.apply(this, arguments);
       } else {
         $.error("Method " + method + " doesn't exist in aGALLERY");
