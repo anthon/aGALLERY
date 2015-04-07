@@ -13,6 +13,7 @@
       options = options or {}
       @each ->
         $this = $(this)
+        force = options.force or false
         background_size = options.backgroundSize or false
         mobile = options.mobile or false
         swipe_threshold = options.swipeThreshold or 20
@@ -43,139 +44,139 @@
         $cback = $("<div style=\"display:inline;margin:0 4px 0 0;cursor:pointer;\"><</div>")
         $cforward = $("<div style=\"display:inline;margin:0 0 0 4px;cursor:pointer;\">></div>")
         
-        if l > 1
-          # if not already initialised
-          unless data
-            if background_size && coverSupported()
-              images.each ->
-                $image = $(this)
-                $img = $('img',$image)
-                src = $img.attr('src')
-                $image.css
-                  'background-image': 'url('+src+')'
-                  'background-size': background_size
-                  'background-position': 'center'
-                  'background-repeat': 'no-repeat'
-                  'width': '100%'
-                  'height': '100%'
-                $img.hide()
+        if force and l > 1 then return false
+        # if not already initialised
+        unless data
+          if background_size && coverSupported()
+            images.each ->
+              $image = $(this)
+              $img = $('img',$image)
+              src = $img.attr('src')
+              $image.css
+                'background-image': 'url('+src+')'
+                'background-size': background_size
+                'background-position': 'center'
+                'background-repeat': 'no-repeat'
+                'width': '100%'
+                'height': '100%'
+              $img.hide()
 
-            $(".image:not(:first)", $this).hide()
-            if mobile
-              onTouchStart = (e) ->
-                touch = e.originalEvent.touches[0]
-                origX = touch.pageX
-                $this.on "touchmove", onSwipe
-                return
-              onSwipe = (e) ->
-                touch = e.originalEvent.touches[0]
-                x = touch.pageX
-                dx = origX - x
-                if Math.abs(dx) >= swipe_threshold
-                  if dx > 0
-                    $this.aGALLERY "next"
-                  else
-                    $this.aGALLERY "prev"
-                return
-              origX = undefined
-              origY = undefined
-              $this.on "touchstart", onTouchStart  if "ontouchstart" of document.documentElement
-            else
-              $back.html "back"
-              $forward.html "forward"
-              $controls.append $back
-              $controls.append $forward
-              $("div", $controls).bind("mouseenter", ->
-                $(this).css "color", "rgba(124,0,0,.64)"
-                return
-              ).bind "mouseleave", ->
-                $(this).css "color", ""
-                return
-
-              $back.bind "click", ->
-                $this.aGALLERY "prev"
-                return
-
-              $forward.bind "click", ->
-                $this.aGALLERY "next"
-                return
-
-              $controls.bind("mouseenter", ->
-                $(document).bind "keydown", (e) ->
-                  e.preventDefault()
-                  switch e.which
-                    when 39
-                      $this.aGALLERY "next"
-                    when 37
-                      $this.aGALLERY "prev"
-
-                return
-              ).bind "mouseleave", ->
-                $(document).unbind "keydown"
-                return
-
-            if width
-              console.log width
-              imgs.css "width", width + "px"
-            else if fixed_width
-              i = l
-              slimmest = 0
-              while i--
-                w = $(imgs[i]).width()
-                slimmest = w  if w < slimmest or slimmest is 0
-              imgs.css "width", slimmest + "px"
-            if height
-              console.log width
-              imgs.css "height", height + "px"
-            else if fixed_height
-              i = l
-              lowest = 0
-              while i--
-                h = $(imgs[i]).height()
-                lowest = h  if h < lowest or lowest is 0
-              imgs.css "height", lowest + "px"
-            $("img", $this).css
-              position: "relative"
-              zIndex: "0"
-
-            $container.css
-              width: $this.width()
-            $this.wrap($container).wrap $floater
-            $this.after $controls
-            if counter
-              $counter.prepend $ccurrent
-              $counter.prepend $cback
-              $counter.append $cforward
-              $this.after $counter
-              $cback.bind 'click', ->
-                $this.aGALLERY 'prev'
-                return
-
-              $cforward.bind 'click', ->
-                $this.aGALLERY 'next'
-                return
-
-            if slideshow
-              slider = setInterval(->
-                $this.aGALLERY 'next'
-                return
-              , interval)
-            $this.on 'navigating', ->
-              clearInterval slider  if slider
-              $this.aGALLERY 'updateCounter'  if counter
+          $(".image:not(:first)", $this).hide()
+          if mobile
+            onTouchStart = (e) ->
+              touch = e.originalEvent.touches[0]
+              origX = touch.pageX
+              $this.on "touchmove", onSwipe
               return
-            
-            # set data
-            $this.data "gallery",
-              target: $this
-              images: images
-              current: current
-              $ccurrent: $ccurrent
-              $back: $back
-              $forward: $forward
-              loop: loop_
-              slideshow: slideshow
-              counter: counter
+            onSwipe = (e) ->
+              touch = e.originalEvent.touches[0]
+              x = touch.pageX
+              dx = origX - x
+              if Math.abs(dx) >= swipe_threshold
+                if dx > 0
+                  $this.aGALLERY "next"
+                else
+                  $this.aGALLERY "prev"
+              return
+            origX = undefined
+            origY = undefined
+            $this.on "touchstart", onTouchStart  if "ontouchstart" of document.documentElement
+          else
+            $back.html "back"
+            $forward.html "forward"
+            $controls.append $back
+            $controls.append $forward
+            $("div", $controls).bind("mouseenter", ->
+              $(this).css "color", "rgba(124,0,0,.64)"
+              return
+            ).bind "mouseleave", ->
+              $(this).css "color", ""
+              return
+
+            $back.bind "click", ->
+              $this.aGALLERY "prev"
+              return
+
+            $forward.bind "click", ->
+              $this.aGALLERY "next"
+              return
+
+            $controls.bind("mouseenter", ->
+              $(document).bind "keydown", (e) ->
+                e.preventDefault()
+                switch e.which
+                  when 39
+                    $this.aGALLERY "next"
+                  when 37
+                    $this.aGALLERY "prev"
+
+              return
+            ).bind "mouseleave", ->
+              $(document).unbind "keydown"
+              return
+
+          if width
+            console.log width
+            imgs.css "width", width + "px"
+          else if fixed_width
+            i = l
+            slimmest = 0
+            while i--
+              w = $(imgs[i]).width()
+              slimmest = w  if w < slimmest or slimmest is 0
+            imgs.css "width", slimmest + "px"
+          if height
+            console.log width
+            imgs.css "height", height + "px"
+          else if fixed_height
+            i = l
+            lowest = 0
+            while i--
+              h = $(imgs[i]).height()
+              lowest = h  if h < lowest or lowest is 0
+            imgs.css "height", lowest + "px"
+          $("img", $this).css
+            position: "relative"
+            zIndex: "0"
+
+          $container.css
+            width: $this.width()
+          $this.wrap($container).wrap $floater
+          $this.after $controls
+          if counter
+            $counter.prepend $ccurrent
+            $counter.prepend $cback
+            $counter.append $cforward
+            $this.after $counter
+            $cback.bind 'click', ->
+              $this.aGALLERY 'prev'
+              return
+
+            $cforward.bind 'click', ->
+              $this.aGALLERY 'next'
+              return
+
+          if slideshow
+            slider = setInterval(->
+              $this.aGALLERY 'next'
+              return
+            , interval)
+          $this.on 'navigating', ->
+            clearInterval slider  if slider
+            $this.aGALLERY 'updateCounter'  if counter
+            return
+          
+          # set data
+          $this.data "gallery",
+            target: $this
+            images: images
+            current: current
+            $ccurrent: $ccurrent
+            $back: $back
+            $forward: $forward
+            loop: loop_
+            slideshow: slideshow
+            counter: counter
 
         return
 

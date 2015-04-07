@@ -16,8 +16,9 @@
       init: function(options) {
         options = options || {};
         return this.each(function() {
-          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fixed_height, fixed_width, h, height, i, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, w, width;
+          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fixed_height, fixed_width, force, h, height, i, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, w, width;
           $this = $(this);
+          force = options.force || false;
           background_size = options.backgroundSize || false;
           mobile = options.mobile || false;
           swipe_threshold = options.swipeThreshold || 20;
@@ -44,155 +45,156 @@
           $ccurrent = $("<span>" + (current + 1) + "</span>");
           $cback = $("<div style=\"display:inline;margin:0 4px 0 0;cursor:pointer;\"><</div>");
           $cforward = $("<div style=\"display:inline;margin:0 0 0 4px;cursor:pointer;\">></div>");
-          if (l > 1) {
-            if (!data) {
-              if (background_size && coverSupported()) {
-                images.each(function() {
-                  var $image, $img, src;
-                  $image = $(this);
-                  $img = $('img', $image);
-                  src = $img.attr('src');
-                  $image.css({
-                    'background-image': 'url(' + src + ')',
-                    'background-size': background_size,
-                    'background-position': 'center',
-                    'background-repeat': 'no-repeat',
-                    'width': '100%',
-                    'height': '100%'
-                  });
-                  return $img.hide();
+          if (force && l > 1) {
+            return false;
+          }
+          if (!data) {
+            if (background_size && coverSupported()) {
+              images.each(function() {
+                var $image, $img, src;
+                $image = $(this);
+                $img = $('img', $image);
+                src = $img.attr('src');
+                $image.css({
+                  'background-image': 'url(' + src + ')',
+                  'background-size': background_size,
+                  'background-position': 'center',
+                  'background-repeat': 'no-repeat',
+                  'width': '100%',
+                  'height': '100%'
                 });
-              }
-              $(".image:not(:first)", $this).hide();
-              if (mobile) {
-                onTouchStart = function(e) {
-                  var origX, touch;
-                  touch = e.originalEvent.touches[0];
-                  origX = touch.pageX;
-                  $this.on("touchmove", onSwipe);
-                };
-                onSwipe = function(e) {
-                  var dx, touch, x;
-                  touch = e.originalEvent.touches[0];
-                  x = touch.pageX;
-                  dx = origX - x;
-                  if (Math.abs(dx) >= swipe_threshold) {
-                    if (dx > 0) {
-                      $this.aGALLERY("next");
-                    } else {
-                      $this.aGALLERY("prev");
-                    }
-                  }
-                };
-                origX = void 0;
-                origY = void 0;
-                if ("ontouchstart" in document.documentElement) {
-                  $this.on("touchstart", onTouchStart);
-                }
-              } else {
-                $back.html("back");
-                $forward.html("forward");
-                $controls.append($back);
-                $controls.append($forward);
-                $("div", $controls).bind("mouseenter", function() {
-                  $(this).css("color", "rgba(124,0,0,.64)");
-                }).bind("mouseleave", function() {
-                  $(this).css("color", "");
-                });
-                $back.bind("click", function() {
-                  $this.aGALLERY("prev");
-                });
-                $forward.bind("click", function() {
-                  $this.aGALLERY("next");
-                });
-                $controls.bind("mouseenter", function() {
-                  $(document).bind("keydown", function(e) {
-                    e.preventDefault();
-                    switch (e.which) {
-                      case 39:
-                        return $this.aGALLERY("next");
-                      case 37:
-                        return $this.aGALLERY("prev");
-                    }
-                  });
-                }).bind("mouseleave", function() {
-                  $(document).unbind("keydown");
-                });
-              }
-              if (width) {
-                console.log(width);
-                imgs.css("width", width + "px");
-              } else if (fixed_width) {
-                i = l;
-                slimmest = 0;
-                while (i--) {
-                  w = $(imgs[i]).width();
-                  if (w < slimmest || slimmest === 0) {
-                    slimmest = w;
-                  }
-                }
-                imgs.css("width", slimmest + "px");
-              }
-              if (height) {
-                console.log(width);
-                imgs.css("height", height + "px");
-              } else if (fixed_height) {
-                i = l;
-                lowest = 0;
-                while (i--) {
-                  h = $(imgs[i]).height();
-                  if (h < lowest || lowest === 0) {
-                    lowest = h;
-                  }
-                }
-                imgs.css("height", lowest + "px");
-              }
-              $("img", $this).css({
-                position: "relative",
-                zIndex: "0"
-              });
-              $container.css({
-                width: $this.width()
-              });
-              $this.wrap($container).wrap($floater);
-              $this.after($controls);
-              if (counter) {
-                $counter.prepend($ccurrent);
-                $counter.prepend($cback);
-                $counter.append($cforward);
-                $this.after($counter);
-                $cback.bind('click', function() {
-                  $this.aGALLERY('prev');
-                });
-                $cforward.bind('click', function() {
-                  $this.aGALLERY('next');
-                });
-              }
-              if (slideshow) {
-                slider = setInterval(function() {
-                  $this.aGALLERY('next');
-                }, interval);
-              }
-              $this.on('navigating', function() {
-                if (slider) {
-                  clearInterval(slider);
-                }
-                if (counter) {
-                  $this.aGALLERY('updateCounter');
-                }
-              });
-              $this.data("gallery", {
-                target: $this,
-                images: images,
-                current: current,
-                $ccurrent: $ccurrent,
-                $back: $back,
-                $forward: $forward,
-                loop: loop_,
-                slideshow: slideshow,
-                counter: counter
+                return $img.hide();
               });
             }
+            $(".image:not(:first)", $this).hide();
+            if (mobile) {
+              onTouchStart = function(e) {
+                var origX, touch;
+                touch = e.originalEvent.touches[0];
+                origX = touch.pageX;
+                $this.on("touchmove", onSwipe);
+              };
+              onSwipe = function(e) {
+                var dx, touch, x;
+                touch = e.originalEvent.touches[0];
+                x = touch.pageX;
+                dx = origX - x;
+                if (Math.abs(dx) >= swipe_threshold) {
+                  if (dx > 0) {
+                    $this.aGALLERY("next");
+                  } else {
+                    $this.aGALLERY("prev");
+                  }
+                }
+              };
+              origX = void 0;
+              origY = void 0;
+              if ("ontouchstart" in document.documentElement) {
+                $this.on("touchstart", onTouchStart);
+              }
+            } else {
+              $back.html("back");
+              $forward.html("forward");
+              $controls.append($back);
+              $controls.append($forward);
+              $("div", $controls).bind("mouseenter", function() {
+                $(this).css("color", "rgba(124,0,0,.64)");
+              }).bind("mouseleave", function() {
+                $(this).css("color", "");
+              });
+              $back.bind("click", function() {
+                $this.aGALLERY("prev");
+              });
+              $forward.bind("click", function() {
+                $this.aGALLERY("next");
+              });
+              $controls.bind("mouseenter", function() {
+                $(document).bind("keydown", function(e) {
+                  e.preventDefault();
+                  switch (e.which) {
+                    case 39:
+                      return $this.aGALLERY("next");
+                    case 37:
+                      return $this.aGALLERY("prev");
+                  }
+                });
+              }).bind("mouseleave", function() {
+                $(document).unbind("keydown");
+              });
+            }
+            if (width) {
+              console.log(width);
+              imgs.css("width", width + "px");
+            } else if (fixed_width) {
+              i = l;
+              slimmest = 0;
+              while (i--) {
+                w = $(imgs[i]).width();
+                if (w < slimmest || slimmest === 0) {
+                  slimmest = w;
+                }
+              }
+              imgs.css("width", slimmest + "px");
+            }
+            if (height) {
+              console.log(width);
+              imgs.css("height", height + "px");
+            } else if (fixed_height) {
+              i = l;
+              lowest = 0;
+              while (i--) {
+                h = $(imgs[i]).height();
+                if (h < lowest || lowest === 0) {
+                  lowest = h;
+                }
+              }
+              imgs.css("height", lowest + "px");
+            }
+            $("img", $this).css({
+              position: "relative",
+              zIndex: "0"
+            });
+            $container.css({
+              width: $this.width()
+            });
+            $this.wrap($container).wrap($floater);
+            $this.after($controls);
+            if (counter) {
+              $counter.prepend($ccurrent);
+              $counter.prepend($cback);
+              $counter.append($cforward);
+              $this.after($counter);
+              $cback.bind('click', function() {
+                $this.aGALLERY('prev');
+              });
+              $cforward.bind('click', function() {
+                $this.aGALLERY('next');
+              });
+            }
+            if (slideshow) {
+              slider = setInterval(function() {
+                $this.aGALLERY('next');
+              }, interval);
+            }
+            $this.on('navigating', function() {
+              if (slider) {
+                clearInterval(slider);
+              }
+              if (counter) {
+                $this.aGALLERY('updateCounter');
+              }
+            });
+            $this.data("gallery", {
+              target: $this,
+              images: images,
+              current: current,
+              $ccurrent: $ccurrent,
+              $back: $back,
+              $forward: $forward,
+              loop: loop_,
+              slideshow: slideshow,
+              counter: counter
+            });
           }
         });
       },
