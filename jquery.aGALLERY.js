@@ -176,7 +176,7 @@
             }
             if (slideshow) {
               slider = setInterval(function() {
-                $this.aGALLERY('next');
+                $this.aGALLERY('next', false);
               }, interval);
             }
             $this.on('navigating', function() {
@@ -201,7 +201,7 @@
           }
         });
       },
-      goToIndex: function(index) {
+      goToIndex: function(index, trigger) {
         var $this, data, left, loop_, right, slideshow;
         if (isNaN(index)) {
           return false;
@@ -214,7 +214,9 @@
           return false;
         }
         data.current = index;
-        $this.trigger('navigating', data.current);
+        if (trigger) {
+          $this.trigger('navigating', data.current);
+        }
         left = data.current;
         right = data.images.length - data.current - 1;
         data.images.hide();
@@ -230,9 +232,10 @@
           data.$forward.show();
         }
       },
-      prev: function() {
+      prev: function(trigger) {
         var $this, data, index, l, left, loop_, slideshow;
         $this = $(this);
+        trigger = typeof trigger !== 'undefined' ? trigger : true;
         data = $this.data('gallery');
         l = data.images.length;
         left = data.current;
@@ -243,11 +246,12 @@
         } else {
           index = (loop_ || slideshow ? l - 1 : data.current);
         }
-        $this.aGALLERY('goToIndex', index);
+        $this.aGALLERY('goToIndex', index, trigger);
       },
-      next: function() {
+      next: function(trigger) {
         var $this, data, index, l, left, loop_, slideshow;
         $this = $(this);
+        trigger = typeof trigger !== 'undefined' ? trigger : true;
         data = $this.data('gallery');
         l = data.images.length;
         left = data.images.length - data.current - 1;
@@ -258,7 +262,7 @@
         } else {
           index = (loop_ || slideshow ? 0 : data.current);
         }
-        $this.aGALLERY('goToIndex', index);
+        $this.aGALLERY('goToIndex', index, trigger);
       },
       updateCounter: function() {
         var $this, data;

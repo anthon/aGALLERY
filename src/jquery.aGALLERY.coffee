@@ -96,6 +96,7 @@
 
             $back.bind "click", ->
               $this.aGALLERY "prev"
+
               return
 
             $forward.bind "click", ->
@@ -159,7 +160,7 @@
 
           if slideshow
             slider = setInterval(->
-              $this.aGALLERY 'next'
+              $this.aGALLERY 'next', false
               return
             , interval)
           $this.on 'navigating', ->
@@ -181,7 +182,7 @@
 
         return
 
-    goToIndex: (index)->
+    goToIndex: (index,trigger)->
       if isNaN(index) then return false
       $this = $(this)
       data = $this.data('gallery')
@@ -189,7 +190,7 @@
       slideshow = data.slideshow
       if index < 0 or data.images.length < index then return false
       data.current = index
-      $this.trigger 'navigating', data.current
+      if trigger then $this.trigger 'navigating', data.current
       left = data.current
       right = data.images.length - data.current - 1
       data.images.hide()
@@ -198,8 +199,9 @@
       if right is 0 and (not loop_ and not slideshow) then data.$forward.hide() else data.$forward.show()
       return
 
-    prev: ->
+    prev: (trigger)->
       $this = $(this)
+      trigger = if typeof trigger isnt 'undefined' then trigger else true
       data = $this.data('gallery')
       l = data.images.length
       left = data.current
@@ -209,11 +211,12 @@
         index = data.current - 1
       else
         index = (if (loop_ or slideshow) then l - 1 else data.current)
-      $this.aGALLERY 'goToIndex', index
+      $this.aGALLERY 'goToIndex', index, trigger
       return
 
-    next: ->
+    next: (trigger)->
       $this = $(this)
+      trigger = if typeof trigger isnt 'undefined' then trigger else true
       data = $this.data('gallery')
       l = data.images.length
       left = data.images.length - data.current - 1
@@ -223,7 +226,7 @@
         index = data.current + 1
       else
         index = (if (loop_ or slideshow) then 0 else data.current)
-      $this.aGALLERY 'goToIndex', index
+      $this.aGALLERY 'goToIndex', index, trigger
       return
 
     updateCounter: ->
