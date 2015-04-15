@@ -27,6 +27,7 @@
         fixed_height = options.fixedHeight or false
         slide_selector = options.slideSelector or '.image'
         fade = options.fade or false
+        gpu = options.gpu or false
         fade_duration = if options.fadeDuration then (options.fadeDuration/1000)+'s' else '.2s' 
         data = $this.data("gallery")
         images = $(slide_selector, $this)
@@ -57,7 +58,7 @@
             $img = $('img',$image)
             slide_css = {}
             if fade
-              slide_css.transform = 'translateZ(0)'
+              if gpu then slide_css.transform = 'translateZ(0)'
               slide_css.transition = 'opacity '+fade_duration
             w = $img.attr('width');
             slimmest = w if w < slimmest or slimmest is 0

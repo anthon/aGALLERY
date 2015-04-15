@@ -16,7 +16,7 @@
       init: function(options) {
         options = options || {};
         return this.each(function() {
-          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fade, fade_duration, fixed_height, fixed_width, force, height, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, width;
+          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fade, fade_duration, fixed_height, fixed_width, force, gpu, height, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, width;
           $this = $(this);
           force = options.force || false;
           background_size = options.backgroundSize || false;
@@ -32,6 +32,7 @@
           fixed_height = options.fixedHeight || false;
           slide_selector = options.slideSelector || '.image';
           fade = options.fade || false;
+          gpu = options.gpu || false;
           fade_duration = options.fadeDuration ? (options.fadeDuration / 1000) + 's' : '.2s';
           data = $this.data("gallery");
           images = $(slide_selector, $this);
@@ -59,7 +60,9 @@
               $img = $('img', $image);
               slide_css = {};
               if (fade) {
-                slide_css.transform = 'translateZ(0)';
+                if (gpu) {
+                  slide_css.transform = 'translateZ(0)';
+                }
                 slide_css.transition = 'opacity ' + fade_duration;
               }
               w = $img.attr('width');
