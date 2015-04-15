@@ -26,11 +26,15 @@
         fixed_width = options.fixedWidth or false
         fixed_height = options.fixedHeight or false
         slide_selector = options.slideSelector or '.image'
+        fade_duration = if options.fadeDuration then (options.fadeDuration/1000)+'s' else '.2s' 
         data = $this.data("gallery")
         images = $(slide_selector, $this)
         imgs = $(slide_selector+' img', $this)
         l = images.length
         current = 0
+
+        lowest = 0
+        slimmest = 0
         
         # $container = $('<div style="position:relative;overflow:hidden;"></div>'),
         # $floater = $('<div style="position:relative;float:left;width:100%;"></div>'),
@@ -47,21 +51,46 @@
         if not force and l < 1 then return false
         # if not already initialised
         unless data
-          if background_size && coverSupported()
-            images.each ->
-              $image = $(this)
-              $img = $('img',$image)
+          images.each ->
+            $image = $(this)
+            $img = $('img',$image)
+            slide_css =
+              transition: 'opacity '+fade_duration
+            w = $img.attr('width');
+            slimmest = w if w < slimmest or slimmest is 0
+            h = $img.attr('height');
+            lowest = h if h < lowest or lowest is 0
+            if w > 0 and h > 0
+              slimmest = w  if w < slimmest or slimmest is 0
+              slide_css['position'] = 'absolute'
+              slide_css['width'] = w+'px'
+              slide_css['height'] = h+'px'
+            if background_size && coverSupported()
               src = $img.attr('src')
-              $image.css
-                'background-image': 'url('+src+')'
-                'background-size': background_size
-                'background-position': 'center'
-                'background-repeat': 'no-repeat'
-                'width': '100%'
-                'height': '100%'
+              slide_css['background-image'] = 'url('+src+')'
+              slide_css['background-size'] = background_size
+              slide_css['background-position'] = 'center'
+              slide_css['background-repeat'] = 'no-repeat'
+              slide_css['width'] = '100%'
+              slide_css['height'] = '100%'
               $img.hide()
+            console.log slide_css
+            $image.css slide_css
 
-          $(slide_selector+':not(:first)', $this).hide()
+          if width
+            $this.css
+              'width': width + 'px'
+          else if slimmest isnt 0
+            $this.css
+              'width': slimmest + 'px'
+          if height
+            $this.css
+              'height': height + 'px'
+          else if lowest isnt 0
+            $this.css
+              'height': lowest + 'px'
+
+          $(slide_selector+':not(:first)', $this).css 'opacity', 0
           $(slide_selector+':first', $this).show()
           if mobile
             onTouchStart = (e) ->
@@ -118,26 +147,6 @@
               $(document).unbind "keydown"
               return
 
-          if width
-            console.log width
-            imgs.css "width", width + "px"
-          else if fixed_width
-            i = l
-            slimmest = 0
-            while i--
-              w = $(imgs[i]).width()
-              slimmest = w  if w < slimmest or slimmest is 0
-            imgs.css "width", slimmest + "px"
-          if height
-            console.log width
-            imgs.css "height", height + "px"
-          else if fixed_height
-            i = l
-            lowest = 0
-            while i--
-              h = $(imgs[i]).height()
-              lowest = h  if h < lowest or lowest is 0
-            imgs.css "height", lowest + "px"
           $("img", $this).css
             position: "relative"
             zIndex: "0"
@@ -195,8 +204,8 @@
       $this.trigger 'slide', data.current
       left = data.current
       right = data.images.length - data.current - 1
-      data.images.hide()
-      $(data.images[index]).show()
+      data.images.css 'opacity', 0
+      $(data.images[index]).css 'opacity', 1
       if left is 0 and (not loop_ and not slideshow) then data.$back.hide() else data.$back.show()
       if right is 0 and (not loop_ and not slideshow) then data.$forward.hide() else data.$forward.show()
       return

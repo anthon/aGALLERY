@@ -16,7 +16,7 @@
       init: function(options) {
         options = options || {};
         return this.each(function() {
-          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fixed_height, fixed_width, force, h, height, i, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, w, width;
+          var $back, $cback, $ccurrent, $cforward, $container, $controls, $counter, $floater, $forward, $this, background_size, counter, current, data, fade_duration, fixed_height, fixed_width, force, height, images, imgs, interval, l, loop_, lowest, mobile, onSwipe, onTouchStart, origX, origY, slide_selector, slider, slideshow, slimmest, swipe_threshold, width;
           $this = $(this);
           force = options.force || false;
           background_size = options.backgroundSize || false;
@@ -31,11 +31,14 @@
           fixed_width = options.fixedWidth || false;
           fixed_height = options.fixedHeight || false;
           slide_selector = options.slideSelector || '.image';
+          fade_duration = options.fadeDuration ? (options.fadeDuration / 1000) + 's' : '.2s';
           data = $this.data("gallery");
           images = $(slide_selector, $this);
           imgs = $(slide_selector + ' img', $this);
           l = images.length;
           current = 0;
+          lowest = 0;
+          slimmest = 0;
           $container = $("<div class=\"aGALLERY-container\" style=\"overflow:hidden;\"></div>");
           $floater = $("<div style=\"position:relative;float:left;width:100%;height:100%;\"></div>");
           $controls = $("<div style=\"position:absolute;top:0;left:0;bottom:0;right:0;font-size:24px;line-height:100%;color:rgba(0,0,0,.12);\"></div>");
@@ -49,24 +52,61 @@
             return false;
           }
           if (!data) {
-            if (background_size && coverSupported()) {
-              images.each(function() {
-                var $image, $img, src;
-                $image = $(this);
-                $img = $('img', $image);
+            images.each(function() {
+              var $image, $img, h, slide_css, src, w;
+              $image = $(this);
+              $img = $('img', $image);
+              slide_css = {
+                transition: 'opacity ' + fade_duration
+              };
+              w = $img.attr('width');
+              if (w < slimmest || slimmest === 0) {
+                slimmest = w;
+              }
+              h = $img.attr('height');
+              if (h < lowest || lowest === 0) {
+                lowest = h;
+              }
+              if (w > 0 && h > 0) {
+                if (w < slimmest || slimmest === 0) {
+                  slimmest = w;
+                }
+                slide_css['position'] = 'absolute';
+                slide_css['width'] = w + 'px';
+                slide_css['height'] = h + 'px';
+              }
+              if (background_size && coverSupported()) {
                 src = $img.attr('src');
-                $image.css({
-                  'background-image': 'url(' + src + ')',
-                  'background-size': background_size,
-                  'background-position': 'center',
-                  'background-repeat': 'no-repeat',
-                  'width': '100%',
-                  'height': '100%'
-                });
-                return $img.hide();
+                slide_css['background-image'] = 'url(' + src + ')';
+                slide_css['background-size'] = background_size;
+                slide_css['background-position'] = 'center';
+                slide_css['background-repeat'] = 'no-repeat';
+                slide_css['width'] = '100%';
+                slide_css['height'] = '100%';
+                $img.hide();
+              }
+              console.log(slide_css);
+              return $image.css(slide_css);
+            });
+            if (width) {
+              $this.css({
+                'width': width + 'px'
+              });
+            } else if (slimmest !== 0) {
+              $this.css({
+                'width': slimmest + 'px'
               });
             }
-            $(slide_selector + ':not(:first)', $this).hide();
+            if (height) {
+              $this.css({
+                'height': height + 'px'
+              });
+            } else if (lowest !== 0) {
+              $this.css({
+                'height': lowest + 'px'
+              });
+            }
+            $(slide_selector + ':not(:first)', $this).css('opacity', 0);
             $(slide_selector + ':first', $this).show();
             if (mobile) {
               onTouchStart = function(e) {
@@ -125,34 +165,6 @@
               }).bind("mouseleave", function() {
                 $(document).unbind("keydown");
               });
-            }
-            if (width) {
-              console.log(width);
-              imgs.css("width", width + "px");
-            } else if (fixed_width) {
-              i = l;
-              slimmest = 0;
-              while (i--) {
-                w = $(imgs[i]).width();
-                if (w < slimmest || slimmest === 0) {
-                  slimmest = w;
-                }
-              }
-              imgs.css("width", slimmest + "px");
-            }
-            if (height) {
-              console.log(width);
-              imgs.css("height", height + "px");
-            } else if (fixed_height) {
-              i = l;
-              lowest = 0;
-              while (i--) {
-                h = $(imgs[i]).height();
-                if (h < lowest || lowest === 0) {
-                  lowest = h;
-                }
-              }
-              imgs.css("height", lowest + "px");
             }
             $("img", $this).css({
               position: "relative",
@@ -221,8 +233,8 @@
         $this.trigger('slide', data.current);
         left = data.current;
         right = data.images.length - data.current - 1;
-        data.images.hide();
-        $(data.images[index]).show();
+        data.images.css('opacity', 0);
+        $(data.images[index]).css('opacity', 1);
         if (left === 0 && (!loop_ && !slideshow)) {
           data.$back.hide();
         } else {
