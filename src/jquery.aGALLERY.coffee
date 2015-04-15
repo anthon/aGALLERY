@@ -64,6 +64,8 @@
             h = $img.attr('height');
             lowest = h if h < lowest or lowest is 0
             if w > 0 and h > 0
+              $img.attr 'width', ''
+              $img.attr 'height', ''
               slimmest = w  if w < slimmest or slimmest is 0
               slide_css['position'] = 'absolute'
             if background_size && coverSupported()

@@ -71,6 +71,8 @@
                 lowest = h;
               }
               if (w > 0 && h > 0) {
+                $img.attr('width', '');
+                $img.attr('height', '');
                 if (w < slimmest || slimmest === 0) {
                   slimmest = w;
                 }
