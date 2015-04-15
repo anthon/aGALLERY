@@ -188,6 +188,7 @@
           $back: $back
           $forward: $forward
           loop: loop_
+          slider: slider
           counter: counter
           slideshow: slideshow
           counter: counter
