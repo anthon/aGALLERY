@@ -62,6 +62,7 @@
               $img.hide()
 
           $(".image:not(:first)", $this).hide()
+          $(".image:first", $this).show()
           if mobile
             onTouchStart = (e) ->
               touch = e.originalEvent.touches[0]

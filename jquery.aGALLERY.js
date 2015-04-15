@@ -67,6 +67,7 @@
               });
             }
             $(".image:not(:first)", $this).hide();
+            $(".image:first", $this).show();
             if (mobile) {
               onTouchStart = function(e) {
                 var origX, touch;
