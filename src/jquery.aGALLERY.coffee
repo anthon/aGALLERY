@@ -208,7 +208,7 @@
       left = data.current
       right = data.images.length - data.current - 1
       data.images.css 'opacity', 0
-      $(data.images[index]).css 'opacity', 1
+      $(data.images[index]).show().css 'opacity', 1
       if left is 0 and (not loop_ and not slideshow) then data.$back.hide() else data.$back.show()
       if right is 0 and (not loop_ and not slideshow) then data.$forward.hide() else data.$forward.show()
       return
