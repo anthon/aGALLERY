@@ -66,8 +66,8 @@
                 return $img.hide();
               });
             }
-            $(".image", $this).hide();
-            $(".image:first", $this).show();
+            $(slide_selector + ':not(:first)', $this).hide();
+            $(slide_selector + ':first', $this).show();
             if (mobile) {
               onTouchStart = function(e) {
                 var origX, touch;
