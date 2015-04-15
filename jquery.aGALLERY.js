@@ -59,10 +59,8 @@
               $img = $('img', $image);
               slide_css = {};
               if (fade) {
-                ({
-                  transform: 'translateZ(0)',
-                  transition: 'opacity ' + fade_duration
-                });
+                slide_css.transform = 'translateZ(0)';
+                slide_css.transition = 'opacity ' + fade_duration;
               }
               w = $img.attr('width');
               if (w < slimmest || slimmest === 0) {
@@ -77,8 +75,6 @@
                   slimmest = w;
                 }
                 slide_css['position'] = 'absolute';
-                slide_css['width'] = w + 'px';
-                slide_css['height'] = h + 'px';
               }
               if (background_size && coverSupported()) {
                 src = $img.attr('src');
