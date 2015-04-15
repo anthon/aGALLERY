@@ -66,7 +66,7 @@
                 return $img.hide();
               });
             }
-            $(".image:not(:first)", $this).hide();
+            $(".image", $this).hide();
             $(".image:first", $this).show();
             if (mobile) {
               onTouchStart = function(e) {
