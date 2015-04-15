@@ -191,6 +191,7 @@
       if index < 0 or data.images.length < index then return false
       data.current = index
       if trigger then $this.trigger 'navigating', data.current
+      $this.trigger 'slide', data.current
       left = data.current
       right = data.images.length - data.current - 1
       data.images.hide()

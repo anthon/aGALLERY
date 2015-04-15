@@ -217,6 +217,7 @@
         if (trigger) {
           $this.trigger('navigating', data.current);
         }
+        $this.trigger('slide', data.current);
         left = data.current;
         right = data.images.length - data.current - 1;
         data.images.hide();
