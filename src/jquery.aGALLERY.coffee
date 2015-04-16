@@ -49,7 +49,7 @@
       $cback = $("<div style=\"display:inline;margin:0 4px 0 0;cursor:pointer;\"><</div>")
       $cforward = $("<div style=\"display:inline;margin:0 0 0 4px;cursor:pointer;\">></div>")
       
-      if not force and l < 1 then return false
+      if not force and l < 2 then return false
       # if not already initialised
       unless data
         images.each ->

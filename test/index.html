@@ -22,11 +22,14 @@
   </head>
   <body id="body">
     <div id="view">
-      <div class="aGALLERY">
+      <div class="noGALLERY">
+        <div class="image"><img src="http://placehold.it/420x240/F0F/FFF" width="420" height="240"></div>
+      </div>
+      <!-- <div class="aGALLERY">
         <div class="image"><img src="http://placehold.it/420x240/F0F/FFF" width="420" height="240"></div>
         <div class="image"><img src="http://placehold.it/420x240/0FF/FFF" width="420" height="240"></div>
         <div class="image"><img src="http://placehold.it/420x240/00F/FFF" width="420" height="240"></div>
-      </div>
+      </div> -->
     </div>
   </body>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
@@ -38,6 +41,11 @@
         slideshow: true,
         fade: true
     	});
+      $('.noGALLERY').aGALLERY({
+        loop: false,
+        slideshow: true,
+        fade: true
+      });
     });
   </script>
 </html>
