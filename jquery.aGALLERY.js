@@ -50,7 +50,7 @@
         $cback = $("<div style=\"display:inline;margin:0 4px 0 0;cursor:pointer;\"><</div>");
         $cforward = $("<div style=\"display:inline;margin:0 0 0 4px;cursor:pointer;\">></div>");
         if (!force && l < 2) {
-          return false;
+          return;
         }
         if (!data) {
           images.each(function() {
