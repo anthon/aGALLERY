@@ -14,21 +14,15 @@
       	height: 240px;
       	margin: auto;
       }
-      .image {
-        /*display: none;*/
-      }
       
     </style>
   </head>
   <body id="body">
     <div id="view">
       <div class="aGALLERY">
-        <div class="image"><img src="http://placehold.it/420x240/F0F/FFF" width="420" height="240"></div>
-      </div>
-      <div class="aGALLERY">
-        <div class="image"><img src="http://placehold.it/420x240/F0F/FFF" width="420" height="240"></div>
-        <div class="image"><img src="http://placehold.it/420x240/0FF/FFF" width="420" height="240"></div>
-        <div class="image"><img src="http://placehold.it/420x240/00F/FFF" width="420" height="240"></div>
+        <div class="image"><img src="http://placehold.it/420x240/F0F/FFF"></div>
+        <div class="image"><img src="http://placehold.it/420x240/0FF/FFF"></div>
+        <div class="image"><img src="http://placehold.it/420x240/00F/FFF"></div>
       </div>
     </div>
   </body>
@@ -36,13 +30,14 @@
   <script src="../jquery.aGALLERY.js"></script>
   <script>
     $(document).ready(function(){
-    	$('.aGALLERY').each(function(){
-        $(this).aGALLERY({
-      		loop: false,
-          slideshow: true,
-          fade: true
-      	});
-      });
+    	$('.aGALLERY').aGALLERY({
+    		loop: false,
+    		slideshow: true,
+    		fade: true,
+    		counter: true,
+    		height: 420,
+    		backgroundSize: 'contain'
+    	});
     });
   </script>
 </html>

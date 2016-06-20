@@ -44,7 +44,7 @@
       $controls = $("<div class=\"aGALLERY-controls\" style=\"position:absolute;top:0;left:0;bottom:0;right:0;font-size:24px;line-height:100%;color:rgba(0,0,0,.12);\"></div>")
       $back = $("<div style=\"position:absolute;top:0;left:0;bottom:0;right:50%;display:none;cursor:w-resize;background:#F00;opacity:0;filter:alpha(opacity=0);\"></div>")
       $forward = $("<div style=\"position:absolute;top:0;left:50%;bottom:0;right:0;display:none;cursor:e-resize;background:#0F0;opacity:0;filter:alpha(opacity=0);\"></div>")
-      $counter = $("<div class=\"aGALLERY-counter\" style=\"text-align:left;\">&nbsp;&nbsp;/&nbsp;" + images.length + "</div>")
+      $counter = $("<div class=\"aGALLERY-counter\" style=\"text-align:left;\">&nbsp;/&nbsp;" + images.length + "</div>")
       $ccurrent = $("<span>" + (current + 1) + "</span>")
       $cback = $("<div style=\"display:inline;margin:0 4px 0 0;cursor:pointer;\"><</div>")
       $cforward = $("<div style=\"display:inline;margin:0 0 0 4px;cursor:pointer;\">></div>")
@@ -59,9 +59,9 @@
           if fade
             if gpu then slide_css.transform = 'translateZ(0)'
             slide_css.transition = 'opacity '+fade_duration
-          w = $img.attr('width');
+          w = $img.attr('width') || $img.width()
           slimmest = w if w < slimmest or slimmest is 0
-          h = $img.attr('height');
+          h = $img.attr('height') || $img.height()
           lowest = h if h < lowest or lowest is 0
           if w > 0 and h > 0
             $img.attr 'width', ''
@@ -191,7 +191,6 @@
           slider: slider
           counter: counter
           slideshow: slideshow
-          counter: counter
 
   killSlideshow = ->
     $this = $(this)
@@ -259,6 +258,7 @@
     goToIndex: goToIndex
     prev: prev
     next: next
+    updateCounter: updateCounter
 
   $.fn.aGALLERY = (method) ->
     # method logic
